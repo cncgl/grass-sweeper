@@ -17,6 +17,7 @@ export default class Start extends Component {
           <svg width="721" height="110">
             <g transform="translate(20, 20)">
               <g transform="translate(0, 0)">
+                <rect className="day" width="11" height="11" y="0" fill="#eeeeee" data-count="0" data-date="2015-04-26"></rect>
                 <rect className="day" width="11" height="11" y="13" fill="#eeeeee" data-count="0" data-date="2015-04-27"></rect>
                 <rect className="day" width="11" height="11" y="26" fill="#eeeeee" data-count="0" data-date="2015-04-28"></rect>
                 <rect className="day" width="11" height="11" y="39" fill="#eeeeee" data-count="0" data-date="2015-04-29"></rect>

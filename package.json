@@ -12,7 +12,8 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "roc-package-web-app-react": "^1.0.0-alpha"
+    "roc-package-web-app-react": "^1.0.0-alpha",
+    "roc-plugin-test-mocha-karma-webpack": "^1.0.0-alpha.4"
   },
   "devDependencies": {
     "babel-eslint": "6.0.2",
