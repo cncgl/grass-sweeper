@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import { connect } from 'react-redux';
 import Radium from 'radium';
 
 import styles from './style.scss';
@@ -494,15 +495,33 @@ class Grass extends Component {
 }
 
 class GrassElement extends Component {
-  handleClick() {
+  constructor(props) {
+    super(props);
+    this.state = { isOpen: false };
+  }
+  
+  _handleHighlight(d) {
+    
+  }
+  
+  _handleClick() {
     console.log('clicked');
-
+    this.setState({ isOpen: true });
   }
 
   render() {
     let {width, height, y, fill} = this.props;
+    if(this.state && this.state.isOpen) fill='#ffffff';
+    console.log(this.state, fill);
     return (
-      <rect className='day' width={width} height={height} y={y} fill={fill} onClick={this.handleClick} />
+      <rect className='day'
+            width={width}
+            height={height}
+            y={y}
+            fill={fill}
+            onClick={this._handleClick.bind(this)}
+            onMouseEnter={this._handleHighlight.bind(this, null)}
+            onMouseLeave={this._handleHighlight.bind(this, null)} />
     );
   }
 }
