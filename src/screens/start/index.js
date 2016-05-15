@@ -11,8 +11,6 @@ export default class Start extends Component {
   render() {
     return (
       <div className={ styles.main }>
-        <h1>Green Sweeper</h1>
-        
         <div className="wrapper">
           <Grass/>
         </div>
