@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 
 import Clicker from '../../components/clicker';
-import Grass from '../../components/grass';
+import GrassSweeper from '../../components/grass';
 
 import styles from './style.scss';
 
@@ -11,9 +11,7 @@ export default class Start extends Component {
   render() {
     return (
       <div className={ styles.main }>
-        <div className="wrapper">
-          <Grass/>
-        </div>
+        <div className="wrapper"><GrassSweeper/></div>
       </div>
     );
   }

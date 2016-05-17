@@ -5,525 +5,232 @@ import Radium from 'radium';
 import styles from './style.scss';
 
 class Grass extends Component {
+  constructor(props) {
+    super(props);
+    // console.log('Grass: ' + JSON.stringify(props));
+    this.state = {
+      hasMine: props.cell.hasMine,
+      hasFlag: props.cell.hasFlag,
+      isOpened: props.cell.isOpend,
+      count: 0
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isOpened: nextProps.cell.isOpend,
+      hasMine: nextProps.cell.hasMine,
+      hasFlag: nextProps.cell.hasFlag,
+      count: nextProps.cell.count
+    });
+  }
+  open() {
+    this.props.open(this.props.cell);
+  }
+  mark(e) {
+    e.preventDefault();
+    if(!this.state.isOpend) {
+      this.props.mark(this.props.cell);
+    }
+  }
+  
+  _handleHighlight() {}
+  _handleClick() {}
+  
+  render() {
+    var _this = this;
+    const width  = 11;
+    const height = 11;
+    const y = this.props.row * 13;
+    var cell = () => {
+      if(_this.state.isOpend) {
+        if(_this.state.hasMine) {
+          return (
+            <rect className='day'
+                  width={width}
+                  height={height}
+                  y={y}
+                  fill='#ff0000'
+                  onClick={this._handleClick.bind(this)}
+                  onMouseEnter={this._handleHighlight.bind(this, null)}
+                  onMouseLeave={this._handleHighlight.bind(this, null)}/>);
+        } else {
+          const colors = ['#eeeeee', '#d6e685', '#bfea95', '#aae272', '#8cc665', '6ab123', '44a340', '1e6823', '0b470e'];
+          return (
+            <rect className='day'
+                  width={width}
+                  height={height}
+                  y={y}
+                  fill='{colors[_this.state.count]}'
+                  onClick={this._handleClick.bind(this)}
+                  onMouseEnter={this._handleHighlight.bind(this, null)}
+                  onMouseLeave={this._handleHighlight.bind(this, null)}/>);
+        }
+      } else if(_this.state.hasFlag) {
+        return (
+          <rect className='day'
+              width={width}
+              height={height}
+              y={y}
+              fill='#0000ff'
+              onClick={this._handleClick.bind(this)}
+              onMouseEnter={this._handleHighlight.bind(this, null)}
+              onMouseLeave={this._handleHighlight.bind(this, null)}/>);
+      } else {
+        return (
+          <rect className='day'
+                width={width}
+                height={height}
+                y={y}
+                fill='#dfdfdf'
+                onClick={this._handleClick.bind(this)}
+                onMouseEnter={this._handleHighlight.bind(this, null)}
+                onMouseLeave={this._handleHighlight.bind(this, null)}/>);
+      }
+    };
+    return cell();
+  }
+}  
+
+
+class Turf extends Component {
+  constructor(props) {
+    super(props);
+    console.log('Turf: '+ JSON.stringify(props));
+    this.state = { cells: props.cells };
+  }
+  copmponentWillReceiveProps(nextProps) {
+    this.setState({ cells: nextProps.cells });
+  }
+  render() {
+    var _this = this;
+    var Cells = this.state.cells.map((cell, index) => {
+      // console.log('index: ' + index);
+      const key = 'turf_' + index;
+      return (
+        <Grass
+          key={key}
+          cell={cell}
+          row={index}
+          open={this.props.open}
+          mark={this.props.mark} />);
+    });
+    console.log('x: '+ JSON.stringify(this.state.cells));
+    var trans_str = 'translate(' + (this.state.cells[0].x * 13) + ',0)';
+    return (<g transform={trans_str}>{Cells}</g>);
+  }
+}
+
+class Grasses extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {cols: this.createTable(props)};  
+  }
+  componentWillReceiveProps(nextProps) {
+    if(this.props.openNum > nextProps.openNum || this.props.colNum !== nextProps.colNum) {
+      this.setState({ cols: this.createTurf(nextProps) });
+    }
+  }
+  createTable(props) {
+    var mineTable = [];
+    for(var col = 0; col < props.colNum; col++){
+      mineTable.push([]);
+      for(var row = 0; row < props.rowNum; row++){
+        mineTable[col].push({
+          x : col,
+          y : row,
+          count : 0,
+          isOpened : false,
+          hasMine : false,
+          hasFlag : false
+        });
+      }
+    }
+    for(var i = 0; i < props.mineNum; i++){
+      var cell = mineTable[Math.floor(Math.random()*props.colNum)][Math.floor(Math.random()*props.rowNum)];
+      if(cell.hasMine){
+        i--;
+      } else {
+        cell.hasMine = true;
+      }
+    }
+    return mineTable;
+  }
+  open(cell) {
+    
+  }
+  mark(cell) {
+    
+  }
+  countMines(cell) {
+    
+  }
+  openAround(cell) {
+    
+  }
+  
   handleClick() {
     console.log('clicked');
     
   }
   
   render() {
+    var Turfs = this.state.cols.map((col, index) => {
+      const key = col + '_' + index;
+      return (<Turf
+        key={key}
+        cells={col}
+        open={this.open.bind(this)}
+        mark={this.mark.bind(this)} />);
+    });
     return (          
       <svg width="721" height="110">
         <g transform="translate(20, 20)">
-          <g transform="translate(0, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(13, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(26, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(39, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(52, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(65, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(78, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(91, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(104, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(117, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#8cc665" />
-          </g>
-          <g transform="translate(130, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(143, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(156, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(169, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(182, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(195, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(208, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(221, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(234, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(247, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(260, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(273, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="26" fill="#44a340" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(286, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(299, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(312, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(325, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#1e6823" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(338, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#1e6823" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(351, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(364, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(377, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#8cc665" />
-          </g>
-          <g transform="translate(390, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(403, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(416, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(429, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#44a340" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(442, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#8cc665" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#44a340" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(455, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#1e6823" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(468, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#44a340" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(481, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#8cc665" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(494, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(507, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(520, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(533, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#44a340" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(546, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(559, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(572, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(585, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#1e6823" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#eeeeee" />
-          </g>
-          <g transform="translate(598, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(611, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(624, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="26" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#1e6823" />
-            <GrassElement width="11" height="11" y="65" fill="#44a340" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(637, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#8cc665" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#44a340" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(650, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="52" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(663, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="39" fill="#eeeeee" />
-            <GrassElement width="11" height="11" y="52" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="65" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="78" fill="#d6e685" />
-          </g>
-          <g transform="translate(676, 0)">
-            <GrassElement width="11" height="11" y="0"  fill="#d6e685" />
-            <GrassElement width="11" height="11" y="13" fill="#d6e685" />
-            <GrassElement width="11" height="11" y="26" fill="#8cc665" />
-            <GrassElement width="11" height="11" y="39" fill="#44a340" />
-          </g>
+          {Turfs}
         </g>
-      </svg>
-    );
+      </svg>);
   }
 }
-
-class GrassElement extends Component {
+ 
+class GrassSweeper extends Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: false };
+    this.state = {
+      level: 'easy',
+      mineNum: 10,
+      colNum: 73,
+      rowNum: 7,
+      flagNum: 0,
+      openNum: 0,
+      time: 0,
+      status: 'playing'
+    };
   }
-  
-  _handleHighlight(d) {
+  componentWillUpdate() {
+    if(this.state.status === 'playing') {
+      this.judge();
+    }
+  }
+  componentWillMount() {
     
   }
+  judge() {
+    if(this.state.mineNum + this.state.openNum >= this.state.rowNum * this.state.colNum) {
+      this.setState( {state: 'Clear'} );
+    }
+  }
+  gameOver() {}
+  addOpenNum() {}
   
-  _handleClick() {
-    console.log('clicked');
-    this.setState({ isOpen: true });
-  }
-
   render() {
-    let {width, height, y, fill} = this.props;
-    if(this.state && this.state.isOpen) fill='#ffffff';
-    console.log(this.state, fill);
-    return (
-      <rect className='day'
-            width={width}
-            height={height}
-            y={y}
-            fill={fill}
-            onClick={this._handleClick.bind(this)}
-            onMouseEnter={this._handleHighlight.bind(this, null)}
-            onMouseLeave={this._handleHighlight.bind(this, null)} />
-    );
+    return (<Grasses
+      openNum={this.state.openNum}
+      mineNum={this.state.mineNum}
+      rowNum ={this.state.rowNum}
+      colNum ={this.state.colNum}
+      gameOver={this.gameOver.bind(this)}
+      addOpenNum={this.addOpenNum.bind(this)} />);
   }
+  
 }
 
-export default Radium(Grass);
+export default Radium(GrassSweeper);
