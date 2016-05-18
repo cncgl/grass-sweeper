@@ -153,19 +153,51 @@ class Grasses extends Component {
         cell.hasMine = true;
       }
     }
+    console.log('Mines:' + JSON.stringify(mineTable));
     return mineTable;
   }
   open(cell) {
+    var num = this.countMines(cell);
+    var _cols = this.state.cols;
+    if(!_cols[cell.x][cell.y].isOpened) { this.props.addOpenNum(); }
+    _cols[cell.x][cell.y].isOpened = true;
+    _cols[cell.x][cell.y].count = cell.hasMine ? 'b' : num;
+    this.setState({ cols: _cols });
     
   }
   mark(cell) {
     
   }
+  // 周囲８方向の mine を数える
   countMines(cell) {
-    
+    var around = 0;
+    for(var col = -1; col <= 1; col++) {
+      for(var row = -1; row <= 1; row++) {
+        if ( cell.y + row >= 0 && cell.x + col >= 0
+          && cell.x + col < this.state.cols.length
+          && cell.y + row < this.state.cols[0].length
+          && this.state.cols[cell.x + col][cell.y + row].hasMine
+          && !(row === 0 && col === 0)) {
+            around ++;
+        }
+      }
+    }
+    return around;
   }
+  // 開いた周囲８方向を開ける
   openAround(cell) {
-    
+    var _cols = this.state.cols;
+    for(var col = -1; col <= 1; col++) {
+      for(var row = -1; row <= 1; row++) {
+        if ( cell.y + row >= 0 && cell.x + col >= 0
+          && cell.x + col < this.state.cols.length
+          && cell.y + row < this.state.cols[0].length
+          && !this.state.cols[cell.x + col][cell.y + row].hasMine
+          && !this.state.cols[cell.x + col][cell.y + row].isOpened) {
+            this.open(_cols[cell.x + col][cell.y + row]);          
+        }
+      }
+    }
   }
   
   handleClick() {
