@@ -140,8 +140,8 @@ class Grasses extends Component {
           y : row,
           count : 0,
           isOpened : false,
-          hasMine : false,
-          hasFlag : false
+          hasMine : false,    // Mine があるか
+          hasFlag : false　   // マークされているか 
         });
       }
     }
@@ -163,10 +163,25 @@ class Grasses extends Component {
     _cols[cell.x][cell.y].isOpened = true;
     _cols[cell.x][cell.y].count = cell.hasMine ? 'b' : num;
     this.setState({ cols: _cols });
-    
+    if(_cols[cell.x][cell.y].hasFlag) {
+      _cols[cell.x][cell.y].hasFlag = false;
+      this.props.checkFlagNum(-1);
+    }
+    // Mine が無ければオープンにする。
+    if(!cell.hasMine && num === 0) {
+      this.openAround(cell);
+    }
+    if(cell.hasMine) {
+      this.props.gameOver();
+    }
   }
+  // マークする
   mark(cell) {
-    
+    var _cols = this.state.cols;
+    var _cell = _cols[cell.x][cell.y];
+    _cell.hasFlag = !_cell.hasFlag;
+    this.setState({ cols: _cols});
+    this.props.checkFlagNum(_cell.hasFlag ? 1 : -1);
   }
   // 周囲８方向の mine を数える
   countMines(cell) {
@@ -199,11 +214,11 @@ class Grasses extends Component {
       }
     }
   }
-  
-  handleClick() {
-    console.log('clicked');
-    
-  }
+    //
+    // handleClick() {
+    //   console.log('clicked');
+    //  
+    // }
   
   render() {
     var Turfs = this.state.cols.map((col, index) => {
@@ -250,7 +265,15 @@ class GrassSweeper extends Component {
       this.setState( {state: 'Clear'} );
     }
   }
-  gameOver() {}
+  // ゲームオーバー状態にする
+  gameOver() {
+    this.setState({ state: 'gameover'});
+  }
+  
+  // 設定されているフラグを増減する
+  checkFlagNum(updateNum) {
+    this.setState({ flagNum: this.state.flagNum + updateNum })
+  }
   addOpenNum() {}
   
   render() {
