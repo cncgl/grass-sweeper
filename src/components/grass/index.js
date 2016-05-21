@@ -83,6 +83,7 @@ class Grass extends Component {
                 y={y}
                 fill='#dfdfdf'
                 onClick={this._handleClick.bind(this)}
+                onContextMenu={this.mark.bind(this)}
                 onMouseEnter={this._handleHighlight.bind(this, null)}
                 onMouseLeave={this._handleHighlight.bind(this, null)}/>);
       }
