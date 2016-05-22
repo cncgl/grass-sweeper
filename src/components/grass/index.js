@@ -34,7 +34,7 @@ class Grass extends Component {
   }
   
   _handleHighlight() {}
-  _handleClick() {}
+  // _handleClick() {}
   
   render() {
     var _this = this;
@@ -42,7 +42,7 @@ class Grass extends Component {
     const height = 11;
     const y = this.props.row * 13;
     var cell = () => {
-      if(_this.state.isOpend) {
+      if(_this.state.isOpened) {
         if(_this.state.hasMine) {
           return (
             <rect className='day'
@@ -50,7 +50,8 @@ class Grass extends Component {
                   height={height}
                   y={y}
                   fill='#ff0000'
-                  onClick={this._handleClick.bind(this)}
+                  onClick={this.open.bind(this)}
+                  onContextMenu={this.mark.bind(this)}
                   onMouseEnter={this._handleHighlight.bind(this, null)}
                   onMouseLeave={this._handleHighlight.bind(this, null)}/>);
         } else {
@@ -61,7 +62,8 @@ class Grass extends Component {
                   height={height}
                   y={y}
                   fill='{colors[_this.state.count]}'
-                  onClick={this._handleClick.bind(this)}
+                  onClick={this.open.bind(this)}
+                  onContextMenu={this.mark.bind(this)}
                   onMouseEnter={this._handleHighlight.bind(this, null)}
                   onMouseLeave={this._handleHighlight.bind(this, null)}/>);
         }
@@ -72,7 +74,8 @@ class Grass extends Component {
               height={height}
               y={y}
               fill='#0000ff'
-              onClick={this._handleClick.bind(this)}
+              onClick={this.open.bind(this)}
+              onContextMenu={this.mark.bind(this)}
               onMouseEnter={this._handleHighlight.bind(this, null)}
               onMouseLeave={this._handleHighlight.bind(this, null)}/>);
       } else {
@@ -82,7 +85,7 @@ class Grass extends Component {
                 height={height}
                 y={y}
                 fill='#dfdfdf'
-                onClick={this._handleClick.bind(this)}
+                onClick={this.open.bind(this)}
                 onContextMenu={this.mark.bind(this)}
                 onMouseEnter={this._handleHighlight.bind(this, null)}
                 onMouseLeave={this._handleHighlight.bind(this, null)}/>);
