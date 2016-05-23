@@ -11,13 +11,13 @@ class Grass extends Component {
     this.state = {
       hasMine: props.cell.hasMine,
       hasFlag: props.cell.hasFlag,
-      isOpened: props.cell.isOpend,
+      isOpened: props.cell.isOpened,
       count: 0
     };
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
-      isOpened: nextProps.cell.isOpend,
+      isOpened: nextProps.cell.isOpened,
       hasMine: nextProps.cell.hasMine,
       hasFlag: nextProps.cell.hasFlag,
       count: nextProps.cell.count
@@ -41,57 +41,23 @@ class Grass extends Component {
     const width  = 11;
     const height = 11;
     const y = this.props.row * 13;
-    var cell = () => {
-      if(_this.state.isOpened) {
-        if(_this.state.hasMine) {
-          return (
-            <rect className='day'
-                  width={width}
-                  height={height}
-                  y={y}
-                  fill='#ff0000'
-                  onClick={this.open.bind(this)}
-                  onContextMenu={this.mark.bind(this)}
-                  onMouseEnter={this._handleHighlight.bind(this, null)}
-                  onMouseLeave={this._handleHighlight.bind(this, null)}/>);
-        } else {
-          const colors = ['#eeeeee', '#d6e685', '#bfea95', '#aae272', '#8cc665', '6ab123', '44a340', '1e6823', '0b470e'];
-          return (
-            <rect className='day'
-                  width={width}
-                  height={height}
-                  y={y}
-                  fill='{colors[_this.state.count]}'
-                  onClick={this.open.bind(this)}
-                  onContextMenu={this.mark.bind(this)}
-                  onMouseEnter={this._handleHighlight.bind(this, null)}
-                  onMouseLeave={this._handleHighlight.bind(this, null)}/>);
-        }
-      } else if(_this.state.hasFlag) {
-        return (
-          <rect className='day'
-              width={width}
-              height={height}
-              y={y}
-              fill='#0000ff'
-              onClick={this.open.bind(this)}
-              onContextMenu={this.mark.bind(this)}
-              onMouseEnter={this._handleHighlight.bind(this, null)}
-              onMouseLeave={this._handleHighlight.bind(this, null)}/>);
-      } else {
-        return (
-          <rect className='day'
-                width={width}
-                height={height}
-                y={y}
-                fill='#dfdfdf'
-                onClick={this.open.bind(this)}
-                onContextMenu={this.mark.bind(this)}
-                onMouseEnter={this._handleHighlight.bind(this, null)}
-                onMouseLeave={this._handleHighlight.bind(this, null)}/>);
-      }
-    };
-    return cell();
+    const colors = ['#eeeeee', '#d6e685', '#bfea95', '#aae272', '#8cc665', '6ab123', '44a340', '1e6823', '0b470e'];
+    var color = '#dfdfdf';
+    if(_this.state.isOpened) {
+      color = _this.state.hasMine ? '#ff0000' : colors[_this.state.count];
+    } else if(_this.state.hasFlag){
+      color = '#0000ff';
+    }
+    return (
+      <rect className='day'
+            width={width}
+            height={height}
+            y={y}
+            fill={color}
+            onClick={this.open.bind(this)}
+            onContextMenu={this.mark.bind(this)}
+            onMouseEnter={this._handleHighlight.bind(this, null)}
+            onMouseLeave={this._handleHighlight.bind(this, null)}/>);
   }
 }  
 
