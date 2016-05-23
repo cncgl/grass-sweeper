@@ -9,8 +9,8 @@ class Grass extends Component {
     super(props);
     // console.log('Grass: ' + JSON.stringify(props));
     this.state = {
-      hasMine: props.cell.hasMine,
-      hasFlag: props.cell.hasFlag,
+      hasMine:  props.cell.hasMine,
+      hasFlag:  props.cell.hasFlag,
       isOpened: props.cell.isOpened,
       count: 0
     };
@@ -18,9 +18,9 @@ class Grass extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       isOpened: nextProps.cell.isOpened,
-      hasMine: nextProps.cell.hasMine,
-      hasFlag: nextProps.cell.hasFlag,
-      count: nextProps.cell.count
+      hasMine:  nextProps.cell.hasMine,
+      hasFlag:  nextProps.cell.hasFlag,
+      count:    nextProps.cell.count
     });
   }
   open() {
@@ -28,7 +28,7 @@ class Grass extends Component {
   }
   mark(e) {
     e.preventDefault();
-    if(!this.state.isOpend) {
+    if(!this.state.isOpened) {
       this.props.mark(this.props.cell);
     }
   }
@@ -81,8 +81,8 @@ class Turf extends Component {
           key={key}
           cell={cell}
           row={index}
-          open={this.props.open}
-          mark={this.props.mark} />);
+          open={_this.props.open}
+          mark={_this.props.mark} />);
     });
     console.log('x: '+ JSON.stringify(this.state.cells));
     var trans_str = 'translate(' + (this.state.cells[0].x * 13) + ',0)';
@@ -184,13 +184,10 @@ class Grasses extends Component {
       }
     }
   }
-    //
-    // handleClick() {
-    //   console.log('clicked');
-    //  
-    // }
   
   render() {
+    const width  = (11 + 2) * this.props.colNum + 20;
+    const height = (11 + 2) * this.props.rowNum + 20;
     var Turfs = this.state.cols.map((col, index) => {
       const key = col + '_' + index;
       return (<Turf
@@ -200,7 +197,7 @@ class Grasses extends Component {
         mark={this.mark.bind(this)} />);
     });
     return (          
-      <svg width="721" height="110">
+      <svg width={width} height={height}>
         <g transform="translate(20, 20)">
           {Turfs}
         </g>
@@ -214,7 +211,7 @@ class GrassSweeper extends Component {
     this.state = {
       level: 'easy',
       mineNum: 10,
-      colNum: 73,
+      colNum: 50,
       rowNum: 7,
       flagNum: 0,
       openNum: 0,
@@ -247,13 +244,19 @@ class GrassSweeper extends Component {
   addOpenNum() {}
   
   render() {
-    return (<Grasses
-      openNum={this.state.openNum}
-      mineNum={this.state.mineNum}
-      rowNum ={this.state.rowNum}
-      colNum ={this.state.colNum}
-      gameOver={this.gameOver.bind(this)}
-      addOpenNum={this.addOpenNum.bind(this)} />);
+    return (
+      <div className="app">
+        <Grasses
+          openNum={this.state.openNum}
+          mineNum={this.state.mineNum}
+          rowNum ={this.state.rowNum}
+          colNum ={this.state.colNum}
+          gameOver={this.gameOver.bind(this)}
+          addOpenNum={this.addOpenNum.bind(this)} />
+        <div className="operation-container">
+          <button>New Game</button>
+        </div>
+      </div>);
   }
   
 }

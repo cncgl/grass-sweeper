@@ -16,9 +16,9 @@ export default class App extends Component {
     return (
       <div className={styles.main}>
         <Helmet
-          link={[{
-            rel: 'icon', href: '/favicon.png'
-          }]}
+          link={[
+            { rel: 'icon', href: '/favicon.png' }
+          ]}
         />
         <a href="https://github.com/cncgl/grass-sweeper">
           <img style={{position: 'absolute', top: 0, right: 0, border: 0}}
@@ -28,7 +28,6 @@ export default class App extends Component {
         </a>
         <Navbar />
         { this.props.children }
-        <Footer />
       </div>);
   }
 }
