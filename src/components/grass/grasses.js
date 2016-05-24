@@ -117,4 +117,5 @@ export default class Grasses extends Component {
 }
 Grasses.propTypes = { openNum: React.PropTypes.number, mineNum: React.PropTypes.number,
   rowNum: React.PropTypes.number, colNum: React.PropTypes.number,
-  gameOver: React.PropTypes.func, addOpenNum: React.PropTypes.func };
+  checkFlagNum: React.PropTypes.func, gameOver: React.PropTypes.func,
+  addOpenNum: React.PropTypes.func };

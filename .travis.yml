@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '5.11.0'
+sudo: false
+env:
+  global:
+    - GIT_COMMITTER_NAME=cncgl
+    - GIT_COMMITTER_EMAIL=concigel@gmail.com
+    - GIT_AUTHOR_NAME=cncgl
+    - GIT_AUTHOR_EMAIL=concigel@gmail.com
+script:
+  - NODE_ENV=test npm test
+after_success:
+  - roc build
+

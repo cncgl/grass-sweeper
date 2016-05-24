@@ -43,6 +43,7 @@ class GrassSweeper extends Component {
           mineNum={this.state.mineNum}
           rowNum ={this.state.rowNum}
           colNum ={this.state.colNum}
+          checkFlagNum={this.checkFlagNum.bind(this)}
           gameOver={this.gameOver.bind(this)}
           addOpenNum={this.addOpenNum.bind(this)}
         />

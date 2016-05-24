@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for screens/about/index.js</title>
+    <title>Code coverage report for components/grass/turf.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">all files</a> / <a href="index.html">screens/about/</a> index.js
+      <a href="../../index.html">all files</a> / <a href="index.html">components/grass/</a> turf.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96.3% </span>
+        <span class="strong">69.44% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>26/27</span>
+        <span class='fraction'>25/36</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,22 +30,22 @@
         <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/4</span>
+        <span class='fraction'>4/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">75% </span>
+        <span class="strong">38.46% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/4</span>
+        <span class='fraction'>5/13</span>
       </div>
       <div class='fl pad1y'>
-        <span class="strong">2 statements, 2 functions</span>
+        <span class="strong">2 functions</span>
         <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -81,14 +81,23 @@
 32
 33
 34
-35
-36</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
+35</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,58 +108,46 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// React Hot Reload does not support stateless function components as of now
-/* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-import styles from './style.scss';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Component } from 'react';
+import Grass from './grass';
 &nbsp;
-export default class About extends Component {
+export default class Turf extends Component {
+<span class="fstat-no" title="function not covered" >  constructor(props) <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span></span>
+    super(props);
+    // console.log('Turf: '+ JSON.stringify(props));
+<span class="cstat-no" title="statement not covered" >    t</span>his.state = { cells: props.cells };
+  }
+  copmponentWillReceiveProps(nextProps) {
+<span class="cstat-no" title="statement not covered" >    t</span>his.setState({ cells: nextProps.cells });
+  }
   render() {
-<span class="cstat-no" title="statement not covered" >    r</span>eturn (
-      &lt;div className={styles.main}&gt;
-        &lt;div className="header"&gt;
-          &lt;h1&gt;About&lt;/h1&gt;
-          &lt;h2&gt;roc-template-web-app-react&lt;/h2&gt;
-        &lt;/div&gt;
-        &lt;div className="wrapper"&gt;
-          &lt;h4&gt;Roc is an open source project by VG&lt;/h4&gt;
-          &lt;p&gt;
-            It allows you to create consistent developer experiences for your teams within the node
-            and npm ecosystem. One of the primary goals is to avoid boilerplate fragmentations
-            across projects. You are currently in a project powered by
-            the &lt;a href="https://github.com/rocjs/roc-package-web-app-react" alt="Github.com Roc Web App React"&gt;roc-package-web-app-react&lt;/a&gt; package.
-          &lt;/p&gt;
-          &lt;p&gt;
-            The project itself is not React-centric.
-          &lt;/p&gt;
-          &lt;h4&gt;Contribute&lt;/h4&gt;
-          &lt;p&gt;
-            If you use the project and have ideas (or code) that will help us improve, please
-            feel free to do so at &lt;a href="https://github.com/rocjs" alt="Github.com Roc"&gt;Github&lt;/a&gt;.
-          &lt;/p&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    );
+<span class="cstat-no" title="statement not covered" >    c</span>onst _this = this;
+<span class="cstat-no" title="statement not covered" >    l</span>et Cells = this.state.cells.map(<span class="fstat-no" title="function not covered" >(cell, index) =&gt; {</span>
+      // console.log('index: ' + index);
+<span class="cstat-no" title="statement not covered" >      c</span>onst key = `turf_${index}`;
+<span class="cstat-no" title="statement not covered" >      r</span>eturn (
+        &lt;Grass
+          key={key}
+          cell={cell}
+          row={index}
+          open={_this.props.open}
+          mark={_this.props.mark}
+        /&gt;);
+    });
+    // console.log('x: '+ JSON.stringify(this.state.cells));
+<span class="cstat-no" title="statement not covered" >    l</span>et transStr = `translate(${this.state.cells[0].x * 13}, 0)`;
+<span class="cstat-no" title="statement not covered" >    r</span>eturn (&lt;g transform={transStr}&gt;{Cells}&lt;/g&gt;);
   }
 }
+Turf.propTypes = { cells: React.PropTypes.array,
+  open: React.PropTypes.func, mark: React.PropTypes.func };
 &nbsp;
 &nbsp;</pre></td></tr>
 </table></pre>
