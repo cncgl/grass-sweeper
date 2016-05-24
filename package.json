@@ -14,8 +14,9 @@
   "dependencies": {
     "primer-css": "^3.0.1",
     "radium": "^0.17.1",
+    "react-share": "^1.6.1",
     "roc-package-web-app-react": "^1.0.0-alpha",
-    "roc-plugin-test-mocha-karma-webpack": "^1.0.0-alpha.4"
+    "roc-plugin-test-mocha-karma-webpack": "^1.0.0-alpha"
   },
   "devDependencies": {
     "babel-eslint": "6.0.2",

@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
 import Radium from 'radium';
 
-import styles from './style.scss';
+// import styles from './style.scss';
 
 class Grass extends Component {
   constructor(props) {
     super(props);
     // console.log('Grass: ' + JSON.stringify(props));
     this.state = {
-      hasMine:  props.cell.hasMine,
-      hasFlag:  props.cell.hasFlag,
+      hasMine: props.cell.hasMine,
+      hasFlag: props.cell.hasFlag,
       isOpened: props.cell.isOpened,
-      count: 0
+      count: 0,
     };
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
       isOpened: nextProps.cell.isOpened,
-      hasMine:  nextProps.cell.hasMine,
-      hasFlag:  nextProps.cell.hasFlag,
-      count:    nextProps.cell.count
+      hasMine: nextProps.cell.hasMine,
+      hasFlag: nextProps.cell.hasFlag,
+      count: nextProps.cell.count,
     });
   }
   open() {
@@ -28,52 +27,50 @@ class Grass extends Component {
   }
   mark(e) {
     e.preventDefault();
-    if(!this.state.isOpened) {
+    if (!this.state.isOpened) {
       this.props.mark(this.props.cell);
     }
   }
-  
   _handleHighlight() {}
   // _handleClick() {}
-  
   render() {
-    var _this = this;
-    const width  = 11;
+    const _this = this;
+    const width = 11;
     const height = 11;
     const y = this.props.row * 13;
-    const colors = ['#eeeeee', '#d6e685', '#bfea95', '#aae272', '#8cc665', '6ab123', '44a340', '1e6823', '0b470e'];
-    var color = '#dfdfdf';
-    if(_this.state.isOpened) {
+    const colors = ['#eeeeee', '#d6e685', '#bfea95', '#aae272', '#8cc665',
+      '6ab123', '44a340', '1e6823', '0b470e'];
+    let color = '#dfdfdf';
+    if (_this.state.isOpened) {
       color = _this.state.hasMine ? '#ff0000' : colors[_this.state.count];
-    } else if(_this.state.hasFlag){
+    } else if (_this.state.hasFlag) {
       color = '#0000ff';
     }
     return (
-      <rect className='day'
-            width={width}
-            height={height}
-            y={y}
-            fill={color}
-            onClick={this.open.bind(this)}
-            onContextMenu={this.mark.bind(this)}
-            onMouseEnter={this._handleHighlight.bind(this, null)}
-            onMouseLeave={this._handleHighlight.bind(this, null)}/>);
+      <rect className="day"
+        width={width}
+        height={height}
+        y={y}
+        fill={color}
+        onClick={this.open.bind(this)}
+        onContextMenu={this.mark.bind(this)}
+        onMouseEnter={this._handleHighlight.bind(this, null)}
+        onMouseLeave={this._handleHighlight.bind(this, null)}
+      />);
   }
-}  
-
-
+}
 class Turf extends Component {
   constructor(props) {
     super(props);
-    console.log('Turf: '+ JSON.stringify(props));
+    // console.log('Turf: '+ JSON.stringify(props));
     this.state = { cells: props.cells };
   }
   copmponentWillReceiveProps(nextProps) {
     this.setState({ cells: nextProps.cells });
   }
   render() {
-    var _this = this;
-    var Cells = this.state.cells.map((cell, index) => {
+    const _this = this;
+    let Cells = this.state.cells.map((cell, index) => {
       // console.log('index: ' + index);
       const key = 'turf_' + index;
       return (
@@ -84,86 +81,87 @@ class Turf extends Component {
           open={_this.props.open}
           mark={_this.props.mark} />);
     });
-    console.log('x: '+ JSON.stringify(this.state.cells));
-    var trans_str = 'translate(' + (this.state.cells[0].x * 13) + ',0)';
-    return (<g transform={trans_str}>{Cells}</g>);
+    // console.log('x: '+ JSON.stringify(this.state.cells));
+    let transStr = 'translate(' + (this.state.cells[0].x * 13) + ',0)';
+    return (<g transform={transStr}>{Cells}</g>);
   }
 }
 
 class Grasses extends Component {
   constructor(props) {
     super(props);
-    this.state = {cols: this.createTable(props)};  
+    this.state = { cols: this.createTable(props) };
   }
   componentWillReceiveProps(nextProps) {
-    if(this.props.openNum > nextProps.openNum || this.props.colNum !== nextProps.colNum) {
+    if (this.props.openNum > nextProps.openNum || this.props.colNum !== nextProps.colNum) {
       this.setState({ cols: this.createTurf(nextProps) });
     }
   }
   createTable(props) {
-    var mineTable = [];
-    for(var col = 0; col < props.colNum; col++){
+    const mineTable = [];
+    for (let col = 0; col < props.colNum; col++) {
       mineTable.push([]);
-      for(var row = 0; row < props.rowNum; row++){
+      for (let row = 0; row < props.rowNum; row++) {
         mineTable[col].push({
-          x : col,
-          y : row,
-          count : 0,
-          isOpened : false,
-          hasMine : false,    // Mine があるか
-          hasFlag : false　   // マークされているか 
+          x: col,
+          y: row,
+          count: 0,
+          isOpened: false,
+          hasMine: false,
+          hasFlag: false,
         });
       }
     }
-    for(var i = 0; i < props.mineNum; i++){
-      var cell = mineTable[Math.floor(Math.random()*props.colNum)][Math.floor(Math.random()*props.rowNum)];
-      if(cell.hasMine){
+    for (let i = 0; i < props.mineNum; i++) {
+      const cell = mineTable[Math.floor(Math.random() * props.colNum)]
+        [Math.floor(Math.random() * props.rowNum)];
+      if (cell.hasMine) {
         i--;
       } else {
         cell.hasMine = true;
       }
     }
-    console.log('Mines:' + JSON.stringify(mineTable));
+    // console.log('Mines:' + JSON.stringify(mineTable));
     return mineTable;
   }
   open(cell) {
-    var num = this.countMines(cell);
-    var _cols = this.state.cols;
-    if(!_cols[cell.x][cell.y].isOpened) { this.props.addOpenNum(); }
+    const num = this.countMines(cell);
+    const _cols = this.state.cols;
+    if (!_cols[cell.x][cell.y].isOpened) { this.props.addOpenNum(); }
     _cols[cell.x][cell.y].isOpened = true;
     _cols[cell.x][cell.y].count = cell.hasMine ? 'b' : num;
     this.setState({ cols: _cols });
-    if(_cols[cell.x][cell.y].hasFlag) {
+    if (_cols[cell.x][cell.y].hasFlag) {
       _cols[cell.x][cell.y].hasFlag = false;
       this.props.checkFlagNum(-1);
     }
     // Mine が無ければオープンにする。
-    if(!cell.hasMine && num === 0) {
+    if (!cell.hasMine && num === 0) {
       this.openAround(cell);
     }
-    if(cell.hasMine) {
+    if (cell.hasMine) {
       this.props.gameOver();
     }
   }
   // マークする
   mark(cell) {
-    var _cols = this.state.cols;
-    var _cell = _cols[cell.x][cell.y];
+    const _cols = this.state.cols;
+    const _cell = _cols[cell.x][cell.y];
     _cell.hasFlag = !_cell.hasFlag;
-    this.setState({ cols: _cols});
+    this.setState({ cols: _cols });
     this.props.checkFlagNum(_cell.hasFlag ? 1 : -1);
   }
   // 周囲８方向の mine を数える
   countMines(cell) {
-    var around = 0;
-    for(var col = -1; col <= 1; col++) {
-      for(var row = -1; row <= 1; row++) {
-        if ( cell.y + row >= 0 && cell.x + col >= 0
+    let around = 0;
+    for (let col = -1; col <= 1; col++) {
+      for (let row = -1; row <= 1; row++) {
+        if (cell.y + row >= 0 && cell.x + col >= 0
           && cell.x + col < this.state.cols.length
           && cell.y + row < this.state.cols[0].length
           && this.state.cols[cell.x + col][cell.y + row].hasMine
           && !(row === 0 && col === 0)) {
-            around ++;
+          around ++;
         }
       }
     }
@@ -171,32 +169,33 @@ class Grasses extends Component {
   }
   // 開いた周囲８方向を開ける
   openAround(cell) {
-    var _cols = this.state.cols;
-    for(var col = -1; col <= 1; col++) {
-      for(var row = -1; row <= 1; row++) {
-        if ( cell.y + row >= 0 && cell.x + col >= 0
+    const _cols = this.state.cols;
+    for (let col = -1; col <= 1; col++) {
+      for (let row = -1; row <= 1; row++) {
+        if (cell.y + row >= 0 && cell.x + col >= 0
           && cell.x + col < this.state.cols.length
           && cell.y + row < this.state.cols[0].length
           && !this.state.cols[cell.x + col][cell.y + row].hasMine
           && !this.state.cols[cell.x + col][cell.y + row].isOpened) {
-            this.open(_cols[cell.x + col][cell.y + row]);          
+          this.open(_cols[cell.x + col][cell.y + row]);
         }
       }
     }
   }
-  
   render() {
-    const width  = (11 + 2) * this.props.colNum + 20;
+    const width = (11 + 2) * this.props.colNum + 20;
     const height = (11 + 2) * this.props.rowNum + 20;
-    var Turfs = this.state.cols.map((col, index) => {
+    const Turfs = this.state.cols.map((col, index) => {
       const key = col + '_' + index;
-      return (<Turf
-        key={key}
-        cells={col}
-        open={this.open.bind(this)}
-        mark={this.mark.bind(this)} />);
+      return (
+        <Turf
+          key={key}
+          cells={col}
+          open={this.open.bind(this)}
+          mark={this.mark.bind(this)}
+        />);
     });
-    return (          
+    return (
       <svg width={width} height={height}>
         <g transform="translate(20, 20)">
           {Turfs}
@@ -204,7 +203,6 @@ class Grasses extends Component {
       </svg>);
   }
 }
- 
 class GrassSweeper extends Component {
   constructor(props) {
     super(props);
@@ -216,33 +214,28 @@ class GrassSweeper extends Component {
       flagNum: 0,
       openNum: 0,
       time: 0,
-      status: 'playing'
+      status: 'playing',
     };
   }
-  componentWillUpdate() {
-    if(this.state.status === 'playing') {
+  componentWillMount() {
+    if (this.state.status === 'playing') {
       this.judge();
     }
   }
-  componentWillMount() {
-    
-  }
   judge() {
-    if(this.state.mineNum + this.state.openNum >= this.state.rowNum * this.state.colNum) {
-      this.setState( {state: 'Clear'} );
+    if (this.state.mineNum + this.state.openNum >= this.state.rowNum * this.state.colNum) {
+      this.setState({ state: 'Clear' });
     }
   }
   // ゲームオーバー状態にする
   gameOver() {
-    this.setState({ state: 'gameover'});
+    this.setState({ state: 'gameover' });
   }
-  
   // 設定されているフラグを増減する
   checkFlagNum(updateNum) {
-    this.setState({ flagNum: this.state.flagNum + updateNum })
+    this.setState({ flagNum: this.state.flagNum + updateNum });
   }
   addOpenNum() {}
-  
   render() {
     return (
       <div className="app">
@@ -252,13 +245,13 @@ class GrassSweeper extends Component {
           rowNum ={this.state.rowNum}
           colNum ={this.state.colNum}
           gameOver={this.gameOver.bind(this)}
-          addOpenNum={this.addOpenNum.bind(this)} />
+          addOpenNum={this.addOpenNum.bind(this)}
+        />
         <div className="operation-container">
           <button>New Game</button>
         </div>
       </div>);
   }
-  
 }
 
 export default Radium(GrassSweeper);

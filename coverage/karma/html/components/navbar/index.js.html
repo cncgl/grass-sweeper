@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">90% </span>
+        <span class="strong">86.36% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>9/10</span>
+        <span class='fraction'>19/22</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">25% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/2</span>
+        <span class='fraction'>1/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>4/5</span>
+        <span class='fraction'>9/12</span>
       </div>
       <div class='fl pad1y'>
         <span class="strong">1 branch</span>
@@ -78,10 +78,62 @@
 29
 30
 31
-32</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -100,6 +152,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -113,32 +177,64 @@
 import { IndexLink, Link } from 'react-router';
 import styles from './style.scss';
 &nbsp;
+import {
+  ShareButtons,
+  ShareCounts,
+  generateShareIcon
+} from 'react-share';
+&nbsp;
+const {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  TwitterShareButton,
+} = ShareButtons;
+const {
+  FacebookShareCount,
+  GooglePlusShareCount,
+} = ShareCounts;
+const FacebookIcon = generateShareIcon('facebook');
+const TwitterIcon = generateShareIcon('twitter');
+const GooglePlusIcon = generateShareIcon('google');
+&nbsp;
+const shareUrl = 'http://cncgle.github.io/green-sweeper';
 export default <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>) =&gt; (
   &lt;div className={styles.navbar}&gt;
     &lt;div className="wrapper"&gt;
-      &lt;ul&gt;
-        &lt;li&gt;
-          &lt;IndexLink
-            to="/"
-            className={styles.a}
-            activeClassName={styles.active}
-          &gt;
-          Home
-        &lt;/IndexLink&gt;
-        &lt;/li&gt;
-        &lt;li&gt;
-          &lt;Link
-            to="/about/"
-            className={styles.a}
-            activeClassName={styles.active}
-          &gt;
-            About
-          &lt;/Link&gt;
-        &lt;/li&gt;
-      &lt;/ul&gt;
+      &lt;h1&gt;Green Sweeper&lt;/h1&gt;
+      
+      &lt;div className={styles.social__container}&gt;
+        &lt;div className={styles.social__wrap}&gt;
+          &lt;TwitterShareButton url={shareUrl} title="Green Sweeper"&gt;
+            &lt;TwitterIcon size={32} round={false} /&gt;
+          &lt;/TwitterShareButton&gt;
+          &lt;div className="myShareCountWrapper"&gt;&amp;nbsp;&lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div className={styles.social__wrap}&gt;
+          &lt;FacebookShareButton url={shareUrl} title="Green Sweeper" &gt;
+            &lt;FacebookIcon size={32} round={false} /&gt;
+          &lt;/FacebookShareButton&gt;
+          &lt;FacebookShareCount url={shareUrl}&gt;
+            {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s</span></span>hareCount =&gt; (
+              &lt;span className="myShareCountWrapper"&gt;{shareCount}&lt;/span&gt;
+            )}
+          &lt;/FacebookShareCount&gt;
+        &lt;/div&gt;
+        
+        &lt;div className={styles.social__wrap}&gt;
+          &lt;GooglePlusShareButton url={shareUrl}&gt;
+            &lt;GooglePlusIcon size={32} round={false} /&gt;
+          &lt;/GooglePlusShareButton&gt;
+          &lt;GooglePlusShareCount url={shareUrl}&gt;
+            {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s</span></span>hareCount =&gt; (
+              &lt;span className="myShareCountWrapper"&gt;{shareCount}&lt;/span&gt;
+            )}
+          &lt;/GooglePlusShareCount&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
     &lt;/div&gt;
-  &lt;/div&gt;
-);
+    
+  &lt;/div&gt;);
 &nbsp;
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -146,7 +242,7 @@ export default <span class="cstat-no" title="statement not covered" ><span class
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 28 2016 16:54:40 GMT+0900 (JST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 24 2016 14:56:07 GMT+0900 (JST)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -1,4 +1,11 @@
 {
-    "extends": "airbnb",
-    "parser": "babel-eslint"
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "comma-dangle": ["always"],
+  "react/jsx-no-bind": [false, {
+    "ignoreRefs": true,
+    "allowArrowFunctions": false,
+    "allowBind": true
+  }],
+  "react/prop-types": true
 }
